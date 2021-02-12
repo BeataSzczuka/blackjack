@@ -1,0 +1,8 @@
+.Chip button {
+    background-color: rgb(194, 32, 32);
+    color: white;
+    font-size: larger;
+    border-radius: 90px;
+    width: 80px;
+    height: 80px;
+}
