@@ -9,7 +9,7 @@ const Card = ({ image }) => (
 );
 
 Card.propTypes = {
-  name: PropTypes.string
+  image: PropTypes.string.isRequired
 };
 
 Card.defaultProps = {};

@@ -1,21 +1,48 @@
 {
     "parser": "babel-eslint",
     "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": false
-},
-"extends": ["airbnb", "prettier"],
-"env": {
-    "browser": true,
-    "jest": true
-},
-"rules": {
-    "max-len": ["warn", {"code": 100}],
-    "prefer-promise-reject-errors": ["off"],
-    "react/jsx-filename-extension": ["off"],
-    "react/prop-types": ["warn"],
-    "react/button-has-type": ["disabled"],
-    "no-return-assign": ["off"]
-  }
+        "sourceType": "module",
+        "allowImportExportEverywhere": true,
+        "codeFrame": false
+    },
+    "extends": [
+        "airbnb",
+        "prettier"
+    ],
+    "env": {
+        "browser": true,
+        "jest": true
+    },
+    "rules": {
+        "max-len": [
+            "warn",
+            {
+                "code": 100
+            }
+        ],
+        "prefer-promise-reject-errors": [
+            "off"
+        ],
+        "react/jsx-filename-extension": [
+            "off"
+        ],
+        "react/prop-types": [
+            "warn"
+        ],
+        "react/button-has-type": [
+            0
+        ],
+        "no-return-assign": [
+            "off"
+        ],
+        "react/destructuring-assignment": [
+            0
+        ],
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true
+            }
+        ]
+    }
 }
