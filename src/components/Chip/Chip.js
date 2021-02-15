@@ -9,7 +9,7 @@ const Chip = ({ value }) => (
 );
 
 Chip.propTypes = {
-  value: PropTypes.number.isRequired
+  value: PropTypes.number.isRequired,
 };
 
 Chip.defaultProps = {};
