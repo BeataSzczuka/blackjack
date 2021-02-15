@@ -12,7 +12,7 @@ export default class App extends Component {
     this.state = {
       deckID: '',
       gameState: false,
-      continueGame: false,
+      continueLastGame: false,
     };
   }
 
@@ -38,12 +38,12 @@ export default class App extends Component {
   }
 
   continueGame() {
-    this.setState({ continueGame: true, gameState: true });
+    this.setState({ continueLastGame: true, gameState: true });
   }
 
   resetGame() {
     this.shuffle();
-    this.setState({ gameState: false, continueGame: false });
+    this.setState({ gameState: false, continueLastGame: false });
   }
 
   render() {
@@ -53,7 +53,7 @@ export default class App extends Component {
         <Game
           key={this.state.deckID}
           deckID={this.state.deckID}
-          continueGame={this.state.continueGame}
+          continueLastGame={this.state.continueLastGame}
         />
       );
     const buttons = [<button onClick={() => this.startGame()}>Start game</button>];

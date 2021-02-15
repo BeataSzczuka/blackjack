@@ -17,7 +17,7 @@
         "code": 100
       }
     ],
-    "arrow-parens": ["always"],
+    "arrow-parens": [1],
     "prefer-promise-reject-errors": ["off"],
     "react/jsx-filename-extension": ["off"],
     "react/prop-types": ["warn"],

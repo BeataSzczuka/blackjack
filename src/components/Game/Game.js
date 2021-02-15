@@ -1,160 +1,76 @@
 import React, { Component } from 'react';
+import { Button } from '@material-ui/core';
 import styles from './Game.module.css';
-import { API_BASE_URL } from '../../AppConstants';
-import Card from '../Card/Card';
 import Chip from '../Chip/Chip';
-import Store from '../../Store';
+import GameRound from '../GameRound/GameRound';
+import RoundHistory from '../RoundHistory/RoundHistory';
 
-const GAME_KEY = 'GAME_KEY';
+const values = [1, 5, 10, 100, 1000];
 
 export default class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerCards: [],
-      dealerCards: [],
-      playerScore: 0,
-      dealerScore: 0,
-      gameResult: null,
-      //  showDealersFstCard: false
+      bet: 0,
+      roundNumber: 0,
+      betPlaced: false,
+      roundsResults: [],
     };
+    this.handleEndOfRound = this.handleEndOfRound.bind(this);
   }
 
-  componentDidMount() {
-    if (this.props.continueGame) {
-      this.setState(Store.getState(GAME_KEY));
-    } else this.startGame();
-
-    window.addEventListener('beforeunload', this.saveGame);
+  handleEndOfRound(result) {
+    this.setState((prevState) => ({
+      roundsResults: [...prevState.roundsResults, result],
+      betPlaced: false,
+    }));
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.saveGame);
-  }
-
-  handleHit() {
-    this.getCards(1).then((resJson) =>
-      this.setState(
-        (prevState) => ({
-          playerCards: [...prevState.playerCards, resJson.cards[0]],
-          playerScore: this.calculateScore([...prevState.playerCards, resJson.cards[0]]),
-        }),
-        () => this.checkResult(),
-      ),
-    );
-  }
-
-  handleStand() {
-    this.handleDealersMovement();
-  }
-
-  handleDoubleDown() {
-    this.handleDealersMovement();
-  }
-
-  handleDealersMovement() {
-    if (this.state.dealerScore <= 16) {
-      this.getCards(1).then((resJson) =>
-        this.setState((prevState) => ({
-          dealerCards: [...prevState.dealerCards, resJson.cards[0]],
-          dealerScore: this.calculateScore([...prevState.dealerCards, resJson.cards[0]]),
-        })),
-      );
-    }
-    //  this.setState({showDealersFstCard: true});
-  }
-
-  getCards(amount) {
-    return fetch(`${API_BASE_URL}${this.props.deckID}/draw/?count=${amount}`).then((res) =>
-      res.json(),
-    );
-  }
-
-  calculateScore = (cards) => {
-    let score = 0;
-    let asesAmount = 0;
-    cards.forEach((card) => {
-      if (Number(card.value)) {
-        score += Number(card.value);
-      } else if (card.value === 'ACE') asesAmount += 1;
-      else score += 10;
-    });
-    while (asesAmount > 0) {
-      asesAmount -= 1;
-      if (score + 11 + asesAmount <= 21) score += 11;
-      else score += 1;
-    }
-    return score;
+  raiseBet = (value) => {
+    this.setState((prevState) => ({
+      bet: prevState.bet + value,
+    }));
   };
 
-  /* eslint-disable class-methods-use-this */
-  saveGame(ev) {
-    /* eslint-disable no-param-reassign */
-    ev = ev || window.event;
-    ev.preventDefault();
-    ev.returnValue = '';
-    return '';
+  canStartNewRound() {
+    return !this.state.betPlaced && this.state.roundNumber < 5;
   }
 
-  checkResult() {
-    if (
-      this.state.playerScore > 21 ||
-      (this.state.dealerScore < 21 && this.state.playerScore < this.state.dealerScore)
-    )
-      this.setState({ gameResult: false });
-    else this.setState({ gameResult: true });
-  }
-
-  startGame() {
-    this.getCards(4).then((resJson) =>
-      this.setState({
-        playerCards: [resJson.cards[0], resJson.cards[1]],
-        playerScore: this.calculateScore([resJson.cards[0], resJson.cards[1]]),
-        dealerCards: [resJson.cards[2], resJson.cards[3]],
-        dealerScore: this.calculateScore([resJson.cards[2], resJson.cards[3]]),
-      }),
-    );
+  placeBet() {
+    this.setState((prevState) => ({
+      betPlaced: true,
+      roundNumber: prevState.roundNumber + 1,
+    }));
   }
 
   render() {
-    const playerCards = this.state.playerCards.map((card) => <Card image={card.image} />);
-    const dealerCards = this.state.dealerCards.map((card) => <Card image={card.image} />);
-    const chips = <Chip value="3" />;
-    let gameHandlers = <></>;
-    if (this.state.gameResult !== null)
-      gameHandlers = this.state.gameResult ? (
-        <div>Congratulations! You won the game</div>
-      ) : (
-        <div>You lost the game</div>
-      );
-    else
-      gameHandlers = (
-        <div>
-          <button onClick={() => this.handleHit()}>Hit</button>
-          <button onClick={() => this.handleStand()}>Stand</button>
-          <button onClick={() => this.handleDoubleDown()}>Double down</button>
-          <button onClick={this.saveGame}>Save game</button>
-        </div>
-      );
-
+    const game = this.state.betPlaced ? (
+      <GameRound
+        key={this.props.deckID}
+        deckID={this.props.deckID}
+        continueLastGame={this.props.continueLastGame}
+        onEndOfRound={this.handleEndOfRound}
+        roundNumber={this.state.roundNumber}
+      />
+    ) : (
+      <></>
+    );
+    const chips = values.map((val) => <Chip clickCallback={this.raiseBet} value={val} />);
+    const betHandler = (
+      <div>
+        {chips}
+        <Button onClick={() => this.placeBet()}>Game</Button>
+      </div>
+    );
+    const results = <div>game is over</div>;
     return (
       <div className={styles.Game} data-testid="Game">
-        <div>
-          <h3>Dealer&apos;s cards</h3>
-          {dealerCards}
-          {this.state.dealerScore}
-        </div>
-        <div>
-          <h3>Player&apos;s cards</h3>
-          {playerCards}
-          {this.state.playerScore}
-        </div>
-
-        <div>
-          <h3>Player&apos;s chips</h3>
-          {chips}
-        </div>
-        {gameHandlers}
+        {game}
+        {this.canStartNewRound() ? betHandler : <></>}
+        {!this.state.betPlaced && this.state.roundNumber === 5 ? results : <></>}
+        {this.state.bet}
+        <Button onClick={() => this.setState({ bet: 0 })}>clear</Button>
+        <RoundHistory rounds={this.state.roundsResults} />
       </div>
     );
   }

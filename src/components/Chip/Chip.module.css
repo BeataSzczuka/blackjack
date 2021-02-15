@@ -1,8 +1,35 @@
-.Chip button {
-    background-color: rgb(194, 32, 32);
-    color: white;
-    font-size: larger;
-    border-radius: 90px;
-    width: 80px;
-    height: 80px;
+.Chip {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 10px dashed white;
+  border-radius: 50%;
+  line-height: 50px;
+  color: white;
+  font-size: larger;
+  padding: 2px;
+}
+
+.Chip div {
+  border: 2px dashed white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.red {
+  background: rgb(116, 15, 15);
+}
+
+.green {
+  background: rgb(44 142 66);
+}
+
+.blue {
+  background: rgb(41, 77, 156);
+}
+
+.black {
+  background: rgb(31, 35, 44);
 }

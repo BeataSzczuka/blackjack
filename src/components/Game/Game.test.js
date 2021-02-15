@@ -7,8 +7,8 @@ describe('<Game />', () => {
   test('it should mount', () => {
     render(<Game />);
 
-    const game = screen.getByTestId('Game');
+    const deal = screen.getByTestId('Game');
 
-    expect(game).toBeInTheDocument();
+    expect(deal).toBeInTheDocument();
   });
 });
