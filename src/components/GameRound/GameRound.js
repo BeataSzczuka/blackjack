@@ -14,7 +14,8 @@ export default class GameRound extends Component {
       dealerCards: [],
       playerScore: 0,
       dealerScore: 0,
-      //  showGameersFstCard: false
+      betDoubled: false,
+      showDealersFstCard: false,
     };
     this.onEndOfRound = this.props.onEndOfRound.bind(this);
   }
@@ -40,30 +41,38 @@ export default class GameRound extends Component {
         }),
         () => {
           if (this.state.playerScore >= 21) this.checkResult();
+          this.handleDealersMovement(true);
         },
       ),
     );
   }
 
   handleStand() {
-    this.handleGameersMovement();
-    this.checkResult();
+    this.handleDealersMovement(false);
   }
 
   handleDoubleDown() {
-    this.handleGameersMovement();
+    this.setState({ betDoubled: true }, () => this.handleDealersMovement(false));
   }
 
-  handleGameersMovement() {
+  handleDealersMovement(playerHasHit) {
     if (this.state.dealerScore <= 16) {
       this.getCards(1).then((resJson) =>
-        this.setState((prevState) => ({
-          dealerCards: [...prevState.dealerCards, resJson.cards[0]],
-          dealerScore: this.calculateScore([...prevState.dealerCards, resJson.cards[0]]),
-        })),
+        this.setState(
+          (prevState) => ({
+            dealerCards: [...prevState.dealerCards, resJson.cards[0]],
+            dealerScore: this.calculateScore([...prevState.dealerCards, resJson.cards[0]]),
+            showDealersFstCard: true,
+          }),
+          () => {
+            if (this.state.dealerScore <= 16 && !playerHasHit) this.handleDealersMovement(false);
+            else this.checkResult();
+          },
+        ),
       );
+    } else if (!playerHasHit) {
+      this.checkResult();
     }
-    //  this.setState({showGameersFstCard: true});
   }
 
   getCards(amount) {
@@ -99,15 +108,18 @@ export default class GameRound extends Component {
   }
 
   checkResult() {
-    let gameResult = false;
+    let winner = 'player';
     if (
       this.state.playerScore > 21 ||
       (this.state.dealerScore < 21 && this.state.playerScore < this.state.dealerScore)
     )
-      gameResult = false;
+      winner = 'dealer';
+    else if (this.state.playerScore < 21 || this.state.playerScore === this.state.dealerScore)
+      winner = 'ex aequo';
     this.onEndOfRound({
       number: this.props.roundNumber,
-      result: gameResult,
+      winner,
+      betDoubled: this.state.betDoubled,
       playerCards: this.state.playerCards,
       dealerCards: this.state.dealerCards,
     });
@@ -115,12 +127,17 @@ export default class GameRound extends Component {
 
   startGameRound() {
     this.getCards(4).then((resJson) =>
-      this.setState({
-        playerCards: [resJson.cards[0], resJson.cards[1]],
-        playerScore: this.calculateScore([resJson.cards[0], resJson.cards[1]]),
-        dealerCards: [resJson.cards[2], resJson.cards[3]],
-        dealerScore: this.calculateScore([resJson.cards[2], resJson.cards[3]]),
-      }),
+      this.setState(
+        {
+          playerCards: [resJson.cards[0], resJson.cards[1]],
+          playerScore: this.calculateScore([resJson.cards[0], resJson.cards[1]]),
+          dealerCards: [resJson.cards[2], resJson.cards[3]],
+          dealerScore: this.calculateScore([resJson.cards[2], resJson.cards[3]]),
+        },
+        () => {
+          if (this.state.playerScore >= 21) this.checkResult();
+        },
+      ),
     );
   }
 
@@ -128,14 +145,20 @@ export default class GameRound extends Component {
     const playerCards = this.state.playerCards.map((card) => (
       <Card key={card} image={card.image} />
     ));
-    const dealerCards = this.state.dealerCards.map((card) => (
-      <Card key={card} image={card.image} />
-    ));
+    const dealerCards = this.state.dealerCards.map((card, i) => {
+      if (i === 0 && !this.state.showDealersFstCard) return <Card key={card} />;
+      return <Card key={card} image={card.image} />;
+    });
     const gameRoundHandlers = (
       <div>
         <button onClick={() => this.handleHit()}>Hit</button>
         <button onClick={() => this.handleStand()}>Stand</button>
-        <button onClick={() => this.handleDoubleDown()}>Double down</button>
+        <button
+          disabled={!this.state.playerCards.length === 2}
+          onClick={() => this.handleDoubleDown()}
+        >
+          Double down
+        </button>
         <button onClick={this.saveGameRound}>Save game</button>
       </div>
     );
@@ -143,7 +166,10 @@ export default class GameRound extends Component {
     return (
       <div className={styles.GameRound} data-testid="GameRound">
         <div>
-          <h2>{`Round ${this.props.roundNumber}`}</h2>
+          <h2>
+            Round
+            {this.props.roundNumber}
+          </h2>
           <h3>Gameer&apos;s cards</h3>
           {dealerCards}
           {this.state.dealerScore}

@@ -17,6 +17,10 @@ export default class RoundHistory extends Component {
               Round
               {round.number}
             </h5>
+            <div>
+              Winner:
+              {round.winner}
+            </div>
             <div id="cards">
               <h6>Player</h6>
               {round.playerCards.map((card) => (
@@ -24,7 +28,7 @@ export default class RoundHistory extends Component {
               ))}
             </div>
             <div id="cards">
-              <h6>Gameer</h6>
+              <h6>Dealer</h6>
               {round.dealerCards.map((card) => (
                 <Card image={card.image} />
               ))}

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
 import './App.css';
 import Game from './components/Game/Game';
 import { API_BASE_URL } from './AppConstants';
 import Store from './Store';
+import Ranking from './components/Ranking/Ranking';
 
 const APP_KEY = 'APP_KEY';
 
@@ -13,6 +15,7 @@ export default class App extends Component {
       deckID: '',
       gameState: false,
       continueLastGame: false,
+      rankingOpened: false,
     };
   }
 
@@ -27,18 +30,26 @@ export default class App extends Component {
     Store.saveState(APP_KEY, this.state);
   }
 
-  shuffle() {
-    fetch(`${API_BASE_URL}new/shuffle/?deck_count=6`)
-      .then((res) => res.json())
-      .then((resJson) => this.setState({ deckID: resJson.deck_id }));
+  onRankingOpen() {
+    this.setState({ rankingOpened: true });
+  }
+
+  onRankingClose = () => {
+    this.setState({ rankingOpened: false });
+  };
+
+  continueGame() {
+    this.setState({ continueLastGame: true, gameState: true });
   }
 
   startGame() {
     this.setState({ gameState: true });
   }
 
-  continueGame() {
-    this.setState({ continueLastGame: true, gameState: true });
+  shuffle() {
+    fetch(`${API_BASE_URL}new/shuffle/?deck_count=6`)
+      .then((res) => res.json())
+      .then((resJson) => this.setState({ deckID: resJson.deck_id }));
   }
 
   resetGame() {
@@ -68,6 +79,9 @@ export default class App extends Component {
         ) : (
           buttons
         )}
+
+        <Button onClick={() => this.onRankingOpen()}>Ranking</Button>
+        <Ranking open={this.state.rankingOpened} onClose={this.onRankingClose} />
       </div>
     );
   }

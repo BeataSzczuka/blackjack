@@ -9,9 +9,11 @@ const Card = ({ image }) => (
 );
 
 Card.propTypes = {
-  image: PropTypes.string.isRequired
+  image: PropTypes.string,
 };
 
-Card.defaultProps = {};
+Card.defaultProps = {
+  image: '/card.png',
+};
 
 export default Card;
