@@ -31,11 +31,11 @@ export default class Game extends Component {
     if (this.props.continueLastGame) {
       this.setState(Store.getState(GAME_KEY));
     }
-    window.addEventListener('beforeunload', this.saveGameInLocalStorage);
+    window.addEventListener('beforeunload', this.onWindowClose);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.saveGameInLocalStorage);
+    window.removeEventListener('beforeunload', this.onWindowClose);
   }
 
   handleEndOfRound(result) {
@@ -65,6 +65,16 @@ export default class Game extends Component {
     const ranking = [...(Store.getState(RANKING_KEY) || []), newResult];
     ranking.sort((a, b) => (a.score <= b.score ? 1 : -1));
     Store.saveState(RANKING_KEY, ranking.slice(0, 10));
+  }
+
+  /* eslint-disable class-methods-use-this */
+  onWindowClose(ev) {
+    /* eslint-disable no-param-reassign */
+    ev = ev || window.event;
+    ev.preventDefault();
+    this.saveGameRound(null);
+    ev.returnValue = '';
+    return '';
   }
 
   raiseBet = (value) => {
@@ -99,18 +109,8 @@ export default class Game extends Component {
     );
   }
 
-  // /* eslint-disable class-methods-use-this */
-  // saveGameRound(ev) {
-  //   /* eslint-disable no-param-reassign */
-  //   ev = ev || window.event;
-  //   ev.preventDefault();
-  //   ev.returnValue = '';
-  //   return '';
-  // }
-
   saveGameInLocalStorage() {
     Store.saveState(GAME_KEY, this.state);
-    window.confirm('Game has been saved');
   }
 
   saveGameRound(state) {
@@ -165,7 +165,14 @@ export default class Game extends Component {
         {this.state.roundsResults.length > 0 && <RoundHistory rounds={this.state.roundsResults} />}
         {!this.state.betPlaced && (
           <div id="appButtons">
-            <Button onClick={() => this.saveGameRound(null)}>Save game</Button>
+            <Button
+              onClick={() => {
+                this.saveGameRound(null);
+                window.confirm('Game has been saved');
+              }}
+            >
+              Save game
+            </Button>
           </div>
         )}
         <Snackbar

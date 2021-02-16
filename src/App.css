@@ -109,7 +109,7 @@ Button span {
   display: flex;
   flex-direction: column;
   width: 80%;
-  min-width: 300px;
+  min-width: 30px;
   margin: auto;
 }
 

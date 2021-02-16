@@ -181,7 +181,14 @@ export default class GameRound extends Component {
         </div>
         {gameRoundHandlers}
         <div id="appButtons">
-          <Button onClick={() => this.props.saveGameRound(this.state)}>Save game</Button>
+          <Button
+            onClick={() => {
+              this.props.saveGameRound(this.state);
+              window.confirm('Game has been saved');
+            }}
+          >
+            Save game
+          </Button>
         </div>
       </div>
     );

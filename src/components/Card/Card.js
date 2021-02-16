@@ -13,7 +13,7 @@ Card.propTypes = {
 };
 
 Card.defaultProps = {
-  image: '/card.png',
+  image: 'card.png',
 };
 
 export default Card;
