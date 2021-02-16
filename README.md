@@ -2,9 +2,13 @@
 
 This project is my implementation of a common game Blackjack.
 
+## Demo
+
+Demo version has been deployed [here](https://beataszczuka.github.io/blackjack/)
+
 ## Rules
 
-You can learn about the rules [here](https://pl.wikipedia.org/wiki/Blackjack)
+You can learn about the rules of Blackjack [here](https://pl.wikipedia.org/wiki/Blackjack)
 
 ## Implementation
 
