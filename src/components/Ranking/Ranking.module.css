@@ -1,1 +1,32 @@
-.Ranking {}
+.Ranking {
+  text-align: center;
+}
+.Ranking div:last-of-type {
+  background-color: rgba(256, 256, 256, 0.7);
+}
+
+.Ranking table {
+  width: 100%;
+  padding: 2rem;
+  padding-top: 0;
+  background-color: rgba(256, 256, 256, 0.7);
+}
+
+.goldText {
+  font-weight: bold;
+  font-family: 'Times New Roman', serif;
+  letter-spacing: 5px;
+  font-size: 2em;
+  background-image: linear-gradient(
+    to right,
+    #462523 0,
+    #cb9b51 2%,
+    #f6e27a 45%,
+    #f6f2c0 50%,
+    #f6e27a 55%,
+    #cb9b51 97%,
+    #462523 100%
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+}

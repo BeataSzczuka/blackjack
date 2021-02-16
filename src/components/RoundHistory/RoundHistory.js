@@ -1,44 +1,66 @@
 import React, { Component } from 'react';
+import { Button } from '@material-ui/core';
 import styles from './RoundHistory.module.css';
 import Card from '../Card/Card';
 
 export default class RoundHistory extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      historyHidden: true,
+    };
+  }
+
+  toggleHistory() {
+    this.setState((prevState) => ({ historyHidden: !prevState.historyHidden }));
   }
 
   render() {
     return (
-      <div className={styles.RoundHistory} data-testid="RoundHistory">
-        {this.props.rounds.map((round) => (
-          <div>
-            <h5>
-              Round
-              {round.number}
-            </h5>
-            <div>
-              Winner:
-              {round.winner}
-            </div>
-            <div id="cards">
-              <h6>Player</h6>
-              {round.playerCards.map((card) => (
-                <Card image={card.image} />
+      <div data-testid="RoundHistory" id="appButtons">
+        <Button
+          className={this.props.rounds.length === 0 && styles.hidden}
+          onClick={() => this.toggleHistory()}
+        >
+          {this.state.historyHidden ? 'show round history' : 'hide round history'}
+        </Button>
+        <div className={this.state.historyHidden ? styles.hidden : styles.RoundHistory}>
+          <span className={styles.goldText}>Round history</span>
+          <table>
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Winner</th>
+                <th>Players cards</th>
+                <th>Dealers cards</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.rounds.map((round) => (
+                <tr>
+                  <td>{round.number}</td>
+                  <td>{round.winner}</td>
+                  <td className={styles.cards}>
+                    <div>
+                      {round.playerCards.map((card) => (
+                        <Card image={card.image} />
+                      ))}
+                    </div>
+                  </td>
+                  <td className={styles.cards}>
+                    <div>
+                      {round.dealerCards.map((card) => (
+                        <Card image={card.image} />
+                      ))}
+                    </div>
+                  </td>
+                  <td>{round.score}</td>
+                </tr>
               ))}
-            </div>
-            <div id="cards">
-              <h6>Dealer</h6>
-              {round.dealerCards.map((card) => (
-                <Card image={card.image} />
-              ))}
-            </div>
-            <div>
-              Result:
-              {round.result}
-            </div>
-          </div>
-        ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

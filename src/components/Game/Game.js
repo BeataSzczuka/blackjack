@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Button } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
 import styles from './Game.module.css';
 import Chip from '../Chip/Chip';
 import { RANKING_KEY } from '../../AppConstants';
 import Store from '../../Store';
 import GameRound from '../GameRound/GameRound';
 import RoundHistory from '../RoundHistory/RoundHistory';
-
-const values = [1, 5, 10, 100, 1000];
 
 export default class Game extends Component {
   constructor(props) {
@@ -18,6 +17,7 @@ export default class Game extends Component {
       betPlaced: false,
       roundsResults: [],
       credit: 1000,
+      resultMessage: '',
     };
     this.handleEndOfRound = this.handleEndOfRound.bind(this);
   }
@@ -29,12 +29,16 @@ export default class Game extends Component {
     else newCredit = this.state.credit - bet;
     this.setState(
       (prevState) => ({
-        roundsResults: [...prevState.roundsResults, result],
+        roundsResults: [{ ...result, score: newCredit }, ...prevState.roundsResults],
         betPlaced: false,
         credit: newCredit,
       }),
       () => {
-        if (this.state.roundNumber === 5) this.handleEndOfGame();
+        if (this.state.roundNumber === 5 || this.state.credit < 1) this.handleEndOfGame();
+        let resultMessage = 'Congratulations! You won this round!';
+        if (result.winner === 'dealer') resultMessage = 'You lost this round...';
+        else if (result.winner === 'ex aequo') resultMessage = 'Ex aequo!';
+        this.setState({ resultMessage });
       },
     );
   }
@@ -53,7 +57,7 @@ export default class Game extends Component {
   };
 
   canStartNewRound() {
-    return !this.state.betPlaced && this.state.roundNumber < 5;
+    return !this.state.betPlaced && this.state.roundNumber < 5 && this.state.credit > 1;
   }
 
   placeBet() {
@@ -61,6 +65,21 @@ export default class Game extends Component {
       betPlaced: true,
       roundNumber: prevState.roundNumber + 1,
     }));
+  }
+
+  summaryOfTheGame() {
+    const won = this.state.roundsResults.filter((r) => r.winner === 'player').length >= 3;
+    if (won)
+      return (
+        <div className={styles.goldText}>
+          <span>Congratulations, you won the game!</span>
+        </div>
+      );
+    return (
+      <div className={styles.goldText}>
+        <span>You lost the game!</span>
+      </div>
+    );
   }
 
   render() {
@@ -73,28 +92,51 @@ export default class Game extends Component {
         roundNumber={this.state.roundNumber}
       />
     );
-    const chips = values.map((val) => <Chip clickCallback={this.raiseBet} value={val} />);
+    const chips = <Chip clickCallback={this.raiseBet} />;
     const betHandler = (
       <div>
-        {chips}
-        <Button
-          disabled={this.state.bet > this.state.credit || this.state.bet === 0}
-          onClick={() => this.placeBet()}
-        >
-          Deal
-        </Button>
-        {this.state.bet > this.state.credit && <div>Your bet is higher than your credit!</div>}
+        <div>{chips}</div>
+        <div id={styles.dealBtns}>
+          <Button disabled={this.state.bet === 0} onClick={() => this.setState({ bet: 0 })}>
+            clear
+          </Button>
+          <Button
+            className={styles.Button}
+            disabled={this.state.bet > this.state.credit || this.state.bet === 0}
+            onClick={() => this.placeBet()}
+          >
+            {`Bet ${this.state.bet}$`}
+          </Button>
+        </div>
       </div>
     );
-    const results = <div>game is over</div>;
+
     return (
       <div className={styles.Game} data-testid="Game">
+        <div id={styles.credit}>
+          <img src="bag-147782_1280.png" alt="Credit" />
+          <span>
+            {this.state.credit}
+            {'$'}
+          </span>
+        </div>
         {game}
-        {this.canStartNewRound() && betHandler}
-        {!this.state.betPlaced && this.state.roundNumber === 5 && results}
-        {this.state.bet}
-        <Button onClick={() => this.setState({ bet: 0 })}>clear</Button>
+        {this.canStartNewRound() ? betHandler : this.summaryOfTheGame()}
         <RoundHistory rounds={this.state.roundsResults} />
+        <Snackbar
+          anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+          className={styles.Info}
+          autoHideDuration={6000}
+          open={this.state.bet > this.state.credit}
+          onClose={() => this.setState({ bet: 0 })}
+          message="Your bet is higher than your credit!"
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={!this.state.betPlaced && this.state.resultMessage !== ''}
+          message={this.state.resultMessage}
+          onClose={() => this.setState({ resultMessage: '' })}
+        />
       </div>
     );
   }

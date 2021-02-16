@@ -58,30 +58,37 @@ export default class App extends Component {
   }
 
   render() {
-    let game = <></>;
-    if (this.state.gameState)
-      game = (
-        <Game
-          key={this.state.deckID}
-          deckID={this.state.deckID}
-          continueLastGame={this.state.continueLastGame}
-        />
-      );
-    const buttons = [<button onClick={() => this.startGame()}>Start game</button>];
-    buttons.push(<button onClick={() => this.continueGame()}>Continue game</button>);
+    const game = this.state.gameState && (
+      <Game
+        key={this.state.deckID}
+        deckID={this.state.deckID}
+        continueLastGame={this.state.continueLastGame}
+      />
+    );
     return (
-      <div className="App">
-        <h1>BLACKJACK</h1>
-        {game}
+      <div className={this.state.gameState ? 'App game' : 'App beginning'}>
+        <div id="background" />
+        <div id="foreground">
+          <h1>BLACKJACK</h1>
+          {game}
 
-        {this.state.gameState ? (
-          <button onClick={() => this.resetGame()}>New game</button>
-        ) : (
-          buttons
-        )}
-
-        <Button onClick={() => this.onRankingOpen()}>Ranking</Button>
-        <Ranking open={this.state.rankingOpened} onClose={this.onRankingClose} />
+          <div id="appButtons">
+            {this.state.gameState ? (
+              <Button onClick={() => this.resetGame()}>New game</Button>
+            ) : (
+              <>
+                <Button className="Button" onClick={() => this.startGame()}>
+                  Play
+                </Button>
+                <Button disabled={!Store.getState('GAME_KEY')} onClick={() => this.continueGame()}>
+                  Continue game
+                </Button>
+              </>
+            )}
+            <Button onClick={() => this.onRankingOpen()}>Ranking</Button>
+          </div>
+          <Ranking open={this.state.rankingOpened} onClose={this.onRankingClose} />
+        </div>
       </div>
     );
   }

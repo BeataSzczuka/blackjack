@@ -1,2 +1,69 @@
 .Game {
 }
+.Button {
+  background-color: aqua;
+}
+.Button:hover {
+  background-color: rgb(103, 173, 173);
+}
+#credit {
+  font-family: 'Playfair Display', serif;
+  text-align: right;
+  font-size: 1em;
+  position: absolute;
+  top: 3vw;
+  right: 3vw;
+  text-shadow: 2px 1px 2px grey;
+}
+#credit > * {
+  vertical-align: middle;
+}
+#credit img {
+  height: 2em;
+  padding-right: 0.2em;
+}
+
+.Info div {
+  background-color: #b93c3c;
+  margin: auto;
+}
+
+#dealBtns > * {
+  width: 100px;
+  border: 1px solid gray;
+  background: transparent;
+  -webkit-backdrop-filter: brightness(0.5);
+  backdrop-filter: blur(9px);
+  margin: 10px;
+  text-transform: none;
+}
+
+#dealBtns > *:disabled {
+  display: none;
+}
+
+#dealBtns {
+  min-height: 0px;
+  margin-bottom: 2em;
+}
+
+.goldText {
+  padding: 2em;
+  font-weight: bold;
+  font-family: 'Times New Roman', serif;
+  letter-spacing: 5px;
+  font-size: 2em;
+  background-image: linear-gradient(
+    to right,
+    #462523 0,
+    #cb9b51 2%,
+    #f6e27a 45%,
+    #f6f2c0 50%,
+    #f6e27a 55%,
+    #cb9b51 97%,
+    #462523 100%
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+  text-shadow: 2px 3px 21px #cb9b51;
+}

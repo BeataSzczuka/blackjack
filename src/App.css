@@ -1,13 +1,122 @@
 .App {
   text-align: center;
-  background: radial-gradient(
-    circle,
-    rgba(24, 154, 30, 1) 0%,
-    rgba(16, 68, 24, 1) 66%,
-    rgba(0, 36, 8, 1) 86%
-  );
   position: absolute;
   width: 100%;
   min-height: 100%;
   height: fit-content;
+  color: white;
+  overflow-x: hidden;
+}
+span {
+  font-family: 'Playfair Display', serif;
+}
+div#background {
+  height: 100%;
+  width: 100%;
+  background-image: url('images/casino_bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  filter: contrast(0.5);
+  position: fixed;
+}
+
+.beginning #background {
+  filter: blur(2px);
+}
+
+div#foreground {
+  background: rgba(0, 25, 0, 0.3);
+  position: absolute;
+  min-height: 100%;
+  height: fit-content;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.game h1 {
+  text-align: left;
+  margin: 2vw;
+  font-size: 2em;
+}
+
+.beginning h1 {
+  overflow: hidden;
+  margin-left: calc(100vw - 100%);
+  animation: grow 1.5s alternate 1.5 ease-in;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1.5);
+  }
+}
+
+h1 {
+  background: linear-gradient(
+    to bottom,
+    #cfc09f 0%,
+    #634f2c 2%,
+    #cfc09f 26%,
+    #cfc09f 27%,
+    #ffecb3 40%,
+    #3a2c0f 78%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Playfair Display', serif;
+  position: relative;
+  text-transform: uppercase;
+  font-size: 9vw;
+  font-weight: 600;
+  text-shadow: 1px 1px 21px #735a32;
+}
+
+h1:after {
+  background: none;
+  content: attr(data-heading);
+  left: 0;
+  top: 0;
+  z-index: -1;
+  position: absolute;
+  text-shadow: -1px 0 1px #c6bb9f, 0 1px 1px #c6bb9f, 5px 5px 10px rgba(0, 0, 0, 0.4),
+    -5px -5px 10px rgba(0, 0, 0, 0.4);
+}
+
+Button {
+  background: linear-gradient(to bottom, #d2c16d 0%, #462523 100%);
+  box-shadow: 3px 3px 10px black;
+}
+
+Button:active {
+  background: linear-gradient(to bottom, #d2c16d 10%, #462523 90%);
+  box-shadow: 3px 3px 5px black;
+}
+
+Button span {
+  color: white;
+  text-shadow: 4px 4px 10px black;
+  text-transform: lowercase;
+  font-family: initial;
+}
+
+#appButtons {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  min-width: 300px;
+  margin: auto;
+}
+
+#appButtons button {
+  margin: 10px;
+}
+
+#appButtons button:disabled {
+  filter: opacity(0.5);
 }

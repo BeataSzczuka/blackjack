@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from '@material-ui/core';
 import styles from './GameRound.module.css';
 import { API_BASE_URL } from '../../AppConstants';
 import Card from '../Card/Card';
@@ -66,7 +67,7 @@ export default class GameRound extends Component {
           }),
           () => {
             if (this.state.dealerScore <= 16 && !playerHasHit) this.handleDealersMovement(false);
-            else this.checkResult();
+            else if (!playerHasHit) this.checkResult();
           },
         ),
       );
@@ -114,7 +115,7 @@ export default class GameRound extends Component {
       (this.state.dealerScore < 21 && this.state.playerScore < this.state.dealerScore)
     )
       winner = 'dealer';
-    else if (this.state.playerScore < 21 || this.state.playerScore === this.state.dealerScore)
+    else if (this.state.playerScore < 21 && this.state.playerScore === this.state.dealerScore)
       winner = 'ex aequo';
     this.onEndOfRound({
       number: this.props.roundNumber,
@@ -143,43 +144,55 @@ export default class GameRound extends Component {
 
   render() {
     const playerCards = this.state.playerCards.map((card) => (
-      <Card key={card} image={card.image} />
+      <Card key={JSON.stringify(card)} image={card.image} />
     ));
     const dealerCards = this.state.dealerCards.map((card, i) => {
       if (i === 0 && !this.state.showDealersFstCard) return <Card key={card} />;
       return <Card key={card} image={card.image} />;
     });
     const gameRoundHandlers = (
-      <div>
-        <button onClick={() => this.handleHit()}>Hit</button>
-        <button onClick={() => this.handleStand()}>Stand</button>
-        <button
+      <div id={styles.gameRoundHandlers}>
+        <Button onClick={() => this.handleHit()}>Hit</Button>
+        <Button onClick={() => this.handleStand()}>Stand</Button>
+        <Button
           disabled={!this.state.playerCards.length === 2}
           onClick={() => this.handleDoubleDown()}
         >
           Double down
-        </button>
-        <button onClick={this.saveGameRound}>Save game</button>
+        </Button>
       </div>
     );
 
     return (
       <div className={styles.GameRound} data-testid="GameRound">
         <div>
-          <h2>
-            Round
+          <span id={styles.roundNumber}>
+            {'Round '}
             {this.props.roundNumber}
-          </h2>
-          <h3>Gameer&apos;s cards</h3>
-          {dealerCards}
-          {this.state.dealerScore}
-        </div>
-        <div>
-          <h3>Player&apos;s cards</h3>
-          {playerCards}
-          {this.state.playerScore}
+          </span>
+          <div id={styles.round}>
+            <div className={styles.cardsContainer}>
+              <span>Player</span>
+              <div className={styles.cards}>{playerCards}</div>
+              <span id={styles.score}>
+                {'Score: '}
+                {this.state.playerScore}
+              </span>
+            </div>
+            <div className={styles.cardsContainer}>
+              <span>Dealer</span>
+              <div className={styles.cards}>{dealerCards}</div>
+              <span id={styles.score}>
+                {'Score: '}
+                {this.state.dealerScore}
+              </span>
+            </div>
+          </div>
         </div>
         {gameRoundHandlers}
+        <div id="appButtons">
+          <Button onClick={this.saveGameRound}>Save game</Button>
+        </div>
       </div>
     );
   }

@@ -1,2 +1,64 @@
-.GameRound {
+.GameRound > div {
+  padding: 0 1em;
+}
+
+.cards {
+  padding: 1em;
+}
+.cards div {
+  display: inline;
+}
+.cards div {
+  margin-left: -20px;
+}
+
+.cards div:first-of-type {
+  margin-left: 0px;
+}
+
+div#round {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cardsContainer {
+  flex: 1 1 50%;
+}
+
+.GameRound div > span {
+  font-weight: bold;
+  font-family: 'Times New Roman', serif;
+  letter-spacing: 5px;
+  font-size: 25px;
+  background-image: linear-gradient(
+    to right,
+    #462523 0,
+    #cb9b51 2%,
+    #f6e27a 45%,
+    #f6f2c0 50%,
+    #f6e27a 55%,
+    #cb9b51 97%,
+    #462523 100%
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+  text-shadow: 2px 3px 21px #cb9b51;
+}
+
+.GameRound span#roundNumber {
+  font-size: 2em;
+}
+.GameRound span#score {
+  font-size: 1em;
+  letter-spacing: normal;
+}
+
+#gameRoundHandlers Button {
+  border-radius: 100%;
+  width: 40px;
+  height: 60px;
+  border: 1px solid gray;
+  background: transparent;
+  backdrop-filter: brightness(0.5);
+  margin: 10px;
 }

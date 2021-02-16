@@ -8,6 +8,12 @@
   color: white;
   font-size: larger;
   padding: 2px;
+  margin: 5px;
+}
+
+button.Chip {
+  box-shadow: 1px 6px 7px 4px rgb(0 0 0 / 30%), inset 1px 0.2px 0.2px -10px rgb(116 15 15),
+    inset 0px 0px 11px 1px rgb(204 198 197 / 50%);
 }
 
 .Chip div {
@@ -16,6 +22,17 @@
   height: 50px;
   border-radius: 50%;
   margin: auto;
+}
+
+button.Chip:hover {
+  transform: scale(1.1);
+}
+button:focus {
+  outline: none;
+}
+button.Chip:active {
+  box-shadow: 1px 3px 2px 2px rgb(0 0 0 / 30%), inset 1px 0.2px 0.2px -10px rgb(116 15 15),
+    inset 0px 11px 26px 1px rgb(204 198 197 / 50%);
 }
 
 .red {
@@ -30,6 +47,34 @@
   background: rgb(41, 77, 156);
 }
 
+.gray {
+  background: rgb(86, 90, 99);
+}
+
 .black {
   background: rgb(31, 35, 44);
+}
+
+h2.Chip {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.goldText {
+  font-weight: bold;
+  font-family: 'Times New Roman', serif;
+  letter-spacing: 5px;
+  font-size: 2em;
+  background-image: linear-gradient(
+    to right,
+    #462523 0,
+    #cb9b51 2%,
+    #f6e27a 45%,
+    #f6f2c0 50%,
+    #f6e27a 55%,
+    #cb9b51 97%,
+    #462523 100%
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+  text-shadow: 2px 3px 21px #cb9b51;
 }
