@@ -20,10 +20,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const remeberdState = Store.getState(APP_KEY);
-    console.log(remeberdState);
-    if (remeberdState) this.setState(remeberdState);
-    if (!this.state.gameState) this.shuffle();
+    this.shuffle();
   }
 
   componentWillUnmount() {

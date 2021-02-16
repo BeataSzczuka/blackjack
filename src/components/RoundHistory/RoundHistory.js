@@ -16,12 +16,10 @@ export default class RoundHistory extends Component {
   }
 
   render() {
+    console.log(this.props.rounds);
     return (
       <div data-testid="RoundHistory" id="appButtons">
-        <Button
-          className={this.props.rounds.length === 0 && styles.hidden}
-          onClick={() => this.toggleHistory()}
-        >
+        <Button onClick={() => this.toggleHistory()}>
           {this.state.historyHidden ? 'show round history' : 'hide round history'}
         </Button>
         <div className={this.state.historyHidden ? styles.hidden : styles.RoundHistory}>

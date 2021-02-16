@@ -22,15 +22,14 @@ export default class GameRound extends Component {
   }
 
   componentDidMount() {
-    if (this.props.continueGame) {
-      this.setState(Store.getState(GAME_ROUND_KEY));
+    const remeberedState = Store.getState(GAME_ROUND_KEY);
+    if (this.props.continueLastGame && remeberedState) {
+      this.setState(remeberedState);
     } else this.startGameRound();
-
-    window.addEventListener('beforeunload', this.saveGameRound);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.saveGameRound);
+    this.props.saveGameRound(this.state);
   }
 
   handleHit() {
@@ -98,15 +97,6 @@ export default class GameRound extends Component {
     }
     return score;
   };
-
-  /* eslint-disable class-methods-use-this */
-  saveGameRound(ev) {
-    /* eslint-disable no-param-reassign */
-    ev = ev || window.event;
-    ev.preventDefault();
-    ev.returnValue = '';
-    return '';
-  }
 
   checkResult() {
     let winner = 'player';
@@ -191,7 +181,7 @@ export default class GameRound extends Component {
         </div>
         {gameRoundHandlers}
         <div id="appButtons">
-          <Button onClick={this.saveGameRound}>Save game</Button>
+          <Button onClick={() => this.props.saveGameRound(this.state)}>Save game</Button>
         </div>
       </div>
     );

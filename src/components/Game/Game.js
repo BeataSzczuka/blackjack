@@ -8,6 +8,9 @@ import Store from '../../Store';
 import GameRound from '../GameRound/GameRound';
 import RoundHistory from '../RoundHistory/RoundHistory';
 
+const GAME_KEY = 'GAME_KEY';
+const GAME_ROUND_KEY = 'GAME_ROUND_KEY';
+
 export default class Game extends Component {
   constructor(props) {
     super(props);
@@ -20,9 +23,23 @@ export default class Game extends Component {
       resultMessage: '',
     };
     this.handleEndOfRound = this.handleEndOfRound.bind(this);
+    this.saveGameInLocalStorage = this.saveGameInLocalStorage.bind(this);
+    this.saveGameRound = this.saveGameRound.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.continueLastGame) {
+      this.setState(Store.getState(GAME_KEY));
+    }
+    window.addEventListener('beforeunload', this.saveGameInLocalStorage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.saveGameInLocalStorage);
   }
 
   handleEndOfRound(result) {
+    Store.saveState(GAME_ROUND_KEY, null);
     let newCredit;
     const bet = result.betDoubled ? 2 * this.state.bet : this.state.bet;
     if (result.winner === 'player') newCredit = this.state.credit + bet * 1.5;
@@ -82,6 +99,25 @@ export default class Game extends Component {
     );
   }
 
+  // /* eslint-disable class-methods-use-this */
+  // saveGameRound(ev) {
+  //   /* eslint-disable no-param-reassign */
+  //   ev = ev || window.event;
+  //   ev.preventDefault();
+  //   ev.returnValue = '';
+  //   return '';
+  // }
+
+  saveGameInLocalStorage() {
+    Store.saveState(GAME_KEY, this.state);
+    window.confirm('Game has been saved');
+  }
+
+  saveGameRound(state) {
+    Store.saveState(GAME_ROUND_KEY, state);
+    this.saveGameInLocalStorage();
+  }
+
   render() {
     const game = this.state.betPlaced && (
       <GameRound
@@ -89,6 +125,7 @@ export default class Game extends Component {
         deckID={this.props.deckID}
         continueLastGame={this.props.continueLastGame}
         onEndOfRound={this.handleEndOfRound}
+        saveGameRound={this.saveGameRound}
         roundNumber={this.state.roundNumber}
       />
     );
@@ -121,8 +158,16 @@ export default class Game extends Component {
           </span>
         </div>
         {game}
-        {this.canStartNewRound() ? betHandler : this.summaryOfTheGame()}
-        <RoundHistory rounds={this.state.roundsResults} />
+        {this.canStartNewRound() && betHandler}
+        {!this.state.betPlaced &&
+          (this.state.roundNumber === 5 || this.state.credit < 1) &&
+          this.summaryOfTheGame()}
+        {this.state.roundsResults.length > 0 && <RoundHistory rounds={this.state.roundsResults} />}
+        {!this.state.betPlaced && (
+          <div id="appButtons">
+            <Button onClick={() => this.saveGameRound(null)}>Save game</Button>
+          </div>
+        )}
         <Snackbar
           anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
           className={styles.Info}
