@@ -72,7 +72,7 @@ export default class GameRound extends Component {
       );
     } else if (!playerHasHit) {
       this.checkResult();
-    }
+    } else this.setState({ showDealersFstCard: true });
   }
 
   getCards(amount) {
