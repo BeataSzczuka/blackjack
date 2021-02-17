@@ -162,7 +162,6 @@ export default class Game extends Component {
         {!this.state.betPlaced &&
           (this.state.roundNumber === 5 || this.state.credit < 1) &&
           this.summaryOfTheGame()}
-        {this.state.roundsResults.length > 0 && <RoundHistory rounds={this.state.roundsResults} />}
         {!this.state.betPlaced && (
           <div id="appButtons">
             <Button
@@ -175,10 +174,11 @@ export default class Game extends Component {
             </Button>
           </div>
         )}
+        {this.state.roundsResults.length > 0 && <RoundHistory rounds={this.state.roundsResults} />}
         <Snackbar
           anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
           className={styles.Info}
-          autoHideDuration={6000}
+          autoHideDuration={3000}
           open={this.state.bet > this.state.credit}
           onClose={() => this.setState({ bet: 0 })}
           message="Your bet is higher than your credit!"
@@ -186,6 +186,7 @@ export default class Game extends Component {
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={!this.state.betPlaced && this.state.resultMessage !== ''}
+          autoHideDuration={3000}
           message={this.state.resultMessage}
           onClose={() => this.setState({ resultMessage: '' })}
         />

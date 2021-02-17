@@ -48,7 +48,6 @@
 }
 
 .goldText {
-  padding: 2em;
   font-weight: bold;
   font-family: 'Times New Roman', serif;
   letter-spacing: 5px;
@@ -66,4 +65,7 @@
   color: transparent;
   -webkit-background-clip: text;
   text-shadow: 2px 3px 21px #cb9b51;
+  padding: 2em 0;
+  max-width: 500px;
+  margin: auto;
 }

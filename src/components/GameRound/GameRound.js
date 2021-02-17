@@ -153,6 +153,13 @@ export default class GameRound extends Component {
       </div>
     );
 
+    const dealerScore = this.state.showDealersFstCard && (
+      <span id={styles.score}>
+        {'Score: '}
+        {this.state.dealerScore}
+      </span>
+    );
+
     return (
       <div className={styles.GameRound} data-testid="GameRound">
         <div>
@@ -172,10 +179,7 @@ export default class GameRound extends Component {
             <div className={styles.cardsContainer}>
               <span>Dealer</span>
               <div className={styles.cards}>{dealerCards}</div>
-              <span id={styles.score}>
-                {'Score: '}
-                {this.state.dealerScore}
-              </span>
+              {dealerScore}
             </div>
           </div>
         </div>
