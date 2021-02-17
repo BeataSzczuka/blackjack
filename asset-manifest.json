@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/blackjack/static/css/main.f5d6d198.chunk.css",
-    "main.js": "/blackjack/static/js/main.285f55e4.chunk.js",
-    "main.js.map": "/blackjack/static/js/main.285f55e4.chunk.js.map",
+    "main.css": "/blackjack/static/css/main.0b7dafa3.chunk.css",
+    "main.js": "/blackjack/static/js/main.7b6dbdfd.chunk.js",
+    "main.js.map": "/blackjack/static/js/main.7b6dbdfd.chunk.js.map",
     "runtime-main.js": "/blackjack/static/js/runtime-main.44e73b37.js",
     "runtime-main.js.map": "/blackjack/static/js/runtime-main.44e73b37.js.map",
     "static/js/2.7c7fec4b.chunk.js": "/blackjack/static/js/2.7c7fec4b.chunk.js",
@@ -10,14 +10,14 @@
     "static/js/3.8400eba4.chunk.js": "/blackjack/static/js/3.8400eba4.chunk.js",
     "static/js/3.8400eba4.chunk.js.map": "/blackjack/static/js/3.8400eba4.chunk.js.map",
     "index.html": "/blackjack/index.html",
-    "static/css/main.f5d6d198.chunk.css.map": "/blackjack/static/css/main.f5d6d198.chunk.css.map",
+    "static/css/main.0b7dafa3.chunk.css.map": "/blackjack/static/css/main.0b7dafa3.chunk.css.map",
     "static/js/2.7c7fec4b.chunk.js.LICENSE.txt": "/blackjack/static/js/2.7c7fec4b.chunk.js.LICENSE.txt",
     "static/media/App.css": "/blackjack/static/media/casino_bg.1d94b8d4.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.44e73b37.js",
     "static/js/2.7c7fec4b.chunk.js",
-    "static/css/main.f5d6d198.chunk.css",
-    "static/js/main.285f55e4.chunk.js"
+    "static/css/main.0b7dafa3.chunk.css",
+    "static/js/main.7b6dbdfd.chunk.js"
   ]
 }
